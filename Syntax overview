@@ -28,3 +28,22 @@ A match is found if any bits from the attribute match the value. This rule is eq
 1.2.840.113556.1.4.1941
 LDAP_MATCHING_RULE_IN_CHAIN
 This rule is limited to filters that apply to the DN. This is a special "extended match operator that walks the chain of ancestry in objects all the way to the root until it finds a match.
+
+### SOURCE: http://www.selfadsi.org/search.htm#ExampleADS
+
+filterStr = "(&(objectCategory=person)(objectClass=user))"    'search for all users
+filterStr = "(objectClass=group)"                             'search for all groups
+filterStr = "(&(objectCategory=person)(objectClass=contact))" 'search for all contacts
+filterStr = "(msExchangeHomeserverName = " & _
+            "/o=MAILOrg/ou=First Administrative Group/cn=Configuration/cn=Servers/cn=KUNGUR"
+                                                              'search for all mailbox user on sServer 'KUNGUR'
+filterStr = "(msExchHideFromAddressLists=TRUE)"               'search for all hidden recipients 
+filterStr = "(displayName=F*)"                                'search for all recipients which displayname                                                               
+                                                              'starts with 'F'
+
+### Source: https://social.technet.microsoft.com/forums/windowsserver/en-US/ff824e31-a945-4d97-929c-e497c87ac6bc/ldapquery-all-users-ine-one-ou
+Assuming that the distinguishedName of the group is CN=Group1,DC=domain,DC=local, then the filter, in your case, 
+direct membership could be obtained by using (&(objectclass=user)(objectcategory=person)(memberof=CN=Group1,DC=Domain,DC=local))
+
+For all group members, including those who are members due to group nesting, you would run:
+(&(objectclass=user)(objectcategory=person)(memberOf:1.2.840.113556.1.4.1941:=cn=Group1,dc=Domain,dc=local))
