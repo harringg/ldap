@@ -1,0 +1,30 @@
+# any user with a mail address 
+Get-ADUser -LDAPFilter '(mail=*)'
+ 
+# any user with NO mail address 
+Get-ADUser -LDAPFilter '(!mail=*)'
+
+# objectClass=person OR objectClass=user
+(|(objectClass=person)(objectClass=user))
+
+# objectClass=person AND objectClass=user
+(&(objectClass=person)(objectClass=user))
+
+# This will only synchronise users in the 'CaptainPlanet' group - this should be applied to the User Object Filter:
+(&(objectCategory=Person)(sAMAccountName=*)(memberOf=cn=MassSpec,ou=users,dc=company,dc=com))
+
+# And this will search for users that are a member of this group, either directly or via nesting:
+(&(objectCategory=Person)(sAMAccountName=*)(memberOf:1.2.840.113556.1.4.1941:=cn=MassSpec,ou=users,dc=company,dc=com))
+
+### SOURCE: https://msdn.microsoft.com/en-us/library/aa746475(v=vs.85).aspx
+1.2.840.113556.1.4.803
+LDAP_MATCHING_RULE_BIT_AND
+A match is found only if all bits from the attribute match the value. This rule is equivalent to a bitwise AND operator.
+
+1.2.840.113556.1.4.804
+LDAP_MATCHING_RULE_BIT_OR
+A match is found if any bits from the attribute match the value. This rule is equivalent to a bitwise OR operator.
+
+1.2.840.113556.1.4.1941
+LDAP_MATCHING_RULE_IN_CHAIN
+This rule is limited to filters that apply to the DN. This is a special "extended match operator that walks the chain of ancestry in objects all the way to the root until it finds a match.
