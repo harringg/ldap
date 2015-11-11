@@ -16,6 +16,18 @@ Get-ADUser -LDAPFilter '(!mail=*)'
 # And this will search for users that are a member of this group, either directly or via nesting:
 (&(objectCategory=Person)(sAMAccountName=*)(memberOf:1.2.840.113556.1.4.1941:=cn=MassSpec,ou=users,dc=company,dc=com))
 
+# any Group that contains the word GRP in it's name
+(objectcategory=group)(samaccountname=*GRP*)
+
+# Universal Group
+(groupType:1.2.840.113556.1.4.803:=8)
+
+# Universal, Global, or Domain Local
+(groupType:1.2.840.113556.1.4.804:=14)
+
+# AD - Groups - empty
+(&(objectClass=group)(!member=*))
+
 ### SOURCE: https://msdn.microsoft.com/en-us/library/aa746475(v=vs.85).aspx
 1.2.840.113556.1.4.803
 LDAP_MATCHING_RULE_BIT_AND
